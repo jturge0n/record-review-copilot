@@ -32,33 +32,13 @@
           class: "px-3 py-2 rounded bg-slate-700 text-white" %>
   </div>
 
-  <h2 class="mt-8 text-xl font-medium">Findings</h2>
-  <% if @findings.any? %>
-    <table class="mt-2 min-w-full text-sm">
-      <thead>
-        <tr class="text-left">
-          <th class="p-2">Category</th>
-          <th class="p-2">Label</th>
-          <th class="p-2">Value</th>
-          <th class="p-2">Date</th>
-          <th class="p-2">Conf.</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @findings.each do |f| %>
-          <tr class="border-t">
-            <td class="p-2"><%= f.category %></td>
-            <td class="p-2"><%= f.label %></td>
-            <td class="p-2"><%= f.value %></td>
-            <td class="p-2"><%= f.date %></td>
-            <td class="p-2"><%= f.confidence %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% else %>
-    <p class="text-slate-600 mt-2">No findings yet. Click “Analyze”.</p>
-  <% end %>
+  <% findings_json = @findings.as_json(only: [:id, :category, :label, :value, :date, :confidence]).to_json %>
+
+  <script type="application/json" id="findings-json">
+    <%= raw(findings_json) %>
+  </script>
+
+  <div data-controller="findings-table"></div>
 
   <details class="mt-8">
     <summary class="cursor-pointer text-slate-600">Show Raw Extracted Text</summary>
