@@ -35,22 +35,16 @@ class DocumentsController < ApplicationController
     @findings = @document.findings.order(:category, :label)
   end
 
-  # Placeholder analye for now; LLM to be integrated later
   def analyze
     @document.update!(status: "processing")
 
-    chunks = Text::Chunker.call(@document.text)
-    Rails.logger.info("Chunked into #{chunks.size} part(s)")
+    chunks = Text::Chunker.call(@document.redact? ? Text::Redactor.call(@document.text) : @document.text)
 
-    if @document.findings.blank?
-      @document.findings.create!(
-        category: "key_date",
-        label: "Placeholder",
-        value: "LLM extraction pending",
-        date: nil,
-        confidence: 0.1
-      )
+    results = chunks.map do |chunk|
+      Llm::MedicalFactsExtractor.call(chunk, redact: @document.redact?)
     end
+
+    Findings::Merge.call(@document, results)
 
     @document.update!(status: "ready")
     redirect_to @document, notice: "Analysis complete."
