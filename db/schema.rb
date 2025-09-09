@@ -15,21 +15,21 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_09_161135) do
   enable_extension "plpgsql"
 
   create_table "documents", force: :cascade do |t|
-    t.string "title"
-    t.string "status"
+    t.string "title", null: false
+    t.string "status", default: "uploaded", null: false
     t.text "text"
-    t.boolean "redact"
+    t.boolean "redact", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "findings", force: :cascade do |t|
     t.bigint "document_id", null: false
-    t.string "category"
+    t.string "category", null: false
     t.string "label"
     t.text "value"
     t.date "date"
-    t.float "confidence"
+    t.float "confidence", default: 0.0
     t.integer "source_start"
     t.integer "source_end"
     t.datetime "created_at", null: false
