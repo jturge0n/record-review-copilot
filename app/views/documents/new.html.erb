@@ -1,2 +1,27 @@
-<h1>Documents#new</h1>
-<p>Find me in app/views/documents/new.html.erb</p>
+<div class="max-w-2xl mx-auto p-6">
+  <h1 class="text-2xl font-semibold">Record Review Copilot</h1>
+  <p class="text-slate-600 mt-1">Upload a medical PDF to extract and summarize key facts.</p>
+
+  <% if flash[:alert] %>
+    <div class="mt-4 p-3 rounded bg-red-50 text-red-700"><%= flash[:alert] %></div>
+  <% end %>
+
+  <%= form_with url: documents_path, multipart: true, class: "mt-6 space-y-4" do %>
+    <div>
+      <label class="block text-sm font-medium">Title</label>
+      <input type="text" name="title" class="mt-1 w-full border rounded px-3 py-2" placeholder="e.g., Smith ER Visit 2023-09-14">
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium">PDF</label>
+      <input type="file" name="pdf" accept="application/pdf" class="mt-1 w-full border rounded px-3 py-2">
+    </div>
+
+    <div class="flex items-center gap-2">
+      <input type="checkbox" name="redact" value="true" checked class="h-4 w-4">
+      <span class="text-sm text-slate-700">Redact personally identifiable details in outputs</span>
+    </div>
+
+    <button class="px-4 py-2 rounded bg-indigo-600 text-white">Upload</button>
+  <% end %>
+</div>
