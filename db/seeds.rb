@@ -1,9 +1,33 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# Clear old data
+Finding.delete_all
+Document.delete_all
+
+doc = Document.create!(
+  title: "Sample ER Visit",
+  text: "Patient presented with chest pain on 2023-08-15. Diagnosed with GERD. Prescribed omeprazole 20mg daily.",
+  status: "ready",
+  redact: true
+)
+
+doc.findings.create!(
+  category: "diagnosis",
+  label: "GERD",
+  value: nil,
+  confidence: 0.9
+)
+
+doc.findings.create!(
+  category: "medication",
+  label: "omeprazole",
+  value: "20mg daily",
+  confidence: 0.95
+)
+
+doc.findings.create!(
+  category: "key_date",
+  label: "ER visit",
+  value: nil,
+  date: "2023-08-15",
+  confidence: 0.85
+)
+puts "Seeded 1 document with 3 findings."
