@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root "documents#new"
 
   resources :documents, only: [:new, :create, :show] do
-    post :process, on: :member
+    post :analyze, on: :member
     get  :export,  on: :member
     post :salesforce_export, on: :member
   end

@@ -1,6 +1,7 @@
 class DocumentsController < ApplicationController
-  def new
-  end
+  before_action :set_document, only: [:show, :analyze, :export, :salesforce_export]
+
+  def new; @document = Document.new; end
 
   def create
   end
@@ -8,7 +9,7 @@ class DocumentsController < ApplicationController
   def show
   end
 
-  def process
+  def analyze
   end
 
   def export
@@ -16,4 +17,8 @@ class DocumentsController < ApplicationController
 
   def salesforce_export
   end
+
+  private
+
+  def set_document; @document = Document.find(params[:id]); end
 end

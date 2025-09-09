@@ -16,8 +16,8 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get process" do
-    get documents_process_url
+  test "should get analyzed" do
+    get documents_analyze_url
     assert_response :success
   end
 
