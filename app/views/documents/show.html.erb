@@ -24,21 +24,41 @@
   <% end %>
 
   <div class="mt-6 flex gap-2">
-    <% unless @document.status == "processing" %>
-      <%= button_to "Analyze", analyze_document_path(@document),
-            method: :post, class: "px-3 py-2 rounded bg-indigo-600 text-white" %>
-    <% end %>
+    <div data-controller="loading"
+        data-action="turbo:submit-start->loading#start turbo:submit-end->loading#end">
+
+      <%= button_to analyze_document_path(@document),
+            method: :post,
+            form: { data: { turbo: true } },
+            class: "px-3 py-2 rounded bg-indigo-600 text-white flex items-center gap-2",
+            data: { loading_target: "button" } do %>
+
+        <svg data-loading-target="spinner" class="hidden h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z"/>
+        </svg>
+
+        <span data-loading-target="label">Analyze</span>
+      <% end %>
+    </div>
+    <p class="text-xs text-slate-500 mt-2">
+      Re-running <em>Analyze</em> will overwrite current findings with fresh results.
+    </p>
+  </div>
+  <div class="mt-6 flex gap-2">
     <%= link_to "Export CSV", export_document_path(@document),
           class: "px-3 py-2 rounded bg-slate-700 text-white" %>
   </div>
 
-  <% findings_json = @findings.as_json(only: [:id, :category, :label, :value, :date, :confidence]).to_json %>
+  <div class="mt-6 flex gap-2">
+    <% findings_json = @findings.as_json(only: [:id, :category, :label, :value, :date, :confidence]).to_json %>
 
-  <script type="application/json" id="findings-json">
-    <%= raw(findings_json) %>
-  </script>
+    <script type="application/json" id="findings-json">
+      <%= raw(findings_json) %>
+    </script>
 
-  <div data-controller="findings-table"></div>
+    <div data-controller="findings-table"></div>
+  </div>
 
   <details class="mt-8">
     <summary class="cursor-pointer text-slate-600">Show Raw Extracted Text</summary>
