@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  document: one
+  category: MyString
+  label: MyString
+  value: MyText
+  date: 2025-09-09
+  confidence: 1.5
+  source_start: 1
+  source_end: 1
+
+two:
+  document: two
+  category: MyString
+  label: MyString
+  value: MyText
+  date: 2025-09-09
+  confidence: 1.5
+  source_start: 1
+  source_end: 1
