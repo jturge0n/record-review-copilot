@@ -1,17 +1,11 @@
 Rails.application.routes.draw do
-  get 'findings/update'
-  get 'documents/new'
-  get 'documents/create'
-  get 'documents/show'
-  get 'documents/process'
-  get 'documents/export'
-  get 'documents/salesforce_export'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  root "documents#new"
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  resources :documents, only: [:new, :create, :show] do
+    post :process, on: :member
+    get  :export,  on: :member
+    post :salesforce_export, on: :member
+  end
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  resources :findings, only: [:update]
 end
